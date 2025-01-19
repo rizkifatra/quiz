@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App - Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .register-card {
+            max-width: 400px;
+            width: 90%;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .app-logo {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 1rem;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            padding: 12px;
+            border: 1px solid #ddd;
+        }
+
+        .form-control:focus {
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.25);
+            border-color: #667eea;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            background: #764ba2;
+        }
+
+        .social-register {
+            border-top: 1px solid #ddd;
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 8px;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="register-card">
+        <div class="text-center">
+            <img src="assets/img/quiz-logo.png" alt="Quiz App Logo" class="app-logo">
+            <h2 class="mb-4 fw-bold">Create Account</h2>
+        </div>
+        <form id="registerForm">
+            <div class="mb-3">
+                <div class="input-group">
+                    <span class="input-group-text bg-white">
+                        <i class="fas fa-user text-muted"></i>
+                    </span>
+                    <input type="text" class="form-control" id="username" placeholder="Username" required>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="input-group">
+                    <span class="input-group-text bg-white">
+                        <i class="fas fa-envelope text-muted"></i>
+                    </span>
+                    <input type="email" class="form-control" id="email" placeholder="Email" required>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="input-group">
+                    <span class="input-group-text bg-white">
+                        <i class="fas fa-lock text-muted"></i>
+                    </span>
+                    <input type="password" class="form-control" id="password" placeholder="Password" required>
+                </div>
+            </div>
+            <div class="mb-4">
+                <div class="input-group">
+                    <span class="input-group-text bg-white">
+                        <i class="fas fa-lock text-muted"></i>
+                    </span>
+                    <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password"
+                        required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 mb-3">Create Account</button>
+            <div class="text-center mb-3">
+                <a href="index.html" class="text-decoration-none">Already have an account? Sign in</a>
+            </div>
+            <div id="errorMsg" class="alert alert-danger d-none" role="alert"></div>
+
+            <div class="social-register text-center">
+                <p class="text-muted mb-3">Or register with</p>
+                <a href="#" class="social-btn bg-primary"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-btn bg-danger"><i class="fab fa-google"></i></a>
+                <a href="#" class="social-btn bg-info"><i class="fab fa-twitter"></i></a>
+            </div>
+        </form>
+    </div>
+</body>
+<script>
+    document.getElementById('registerForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const username = document.getElementById('username').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        const errorMsg = document.getElementById('errorMsg');
+
+        // Validation
+        if (password !== confirmPassword) {
+            showError('Passwords do not match');
+            return;
+        }
+
+        if (password.length < 3) {
+            showError('Password must be at least 6 characters');
+            return;
+        }
+
+        try {
+            const response = await fetch('register.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, email, password })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                window.location.href = 'index.html?registered=true';
+            } else {
+                showError(data.message);
+            }
+        } catch (error) {
+            showError('An error occurred. Please try again.');
+            console.error('Error:', error);
+        }
+    });
+
+    function showError(message) {
+        const errorMsg = document.getElementById('errorMsg');
+        errorMsg.textContent = message;
+        errorMsg.classList.remove('d-none');
+    }
+</script>
+
+</html>
