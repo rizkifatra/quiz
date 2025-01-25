@@ -396,6 +396,7 @@
                     if (stream1) {
                         stream1.getTracks().forEach(track => track.stop());
                     }
+                    // Use default camera settings
                     stream1 = await navigator.mediaDevices.getUserMedia({ video: true });
                     camera1.srcObject = stream1;
                     camera1.style.display = 'block';
@@ -408,34 +409,12 @@
                 }
             });
 
-            captureButton1.addEventListener('click', () => {
-                canvas1.width = camera1.videoWidth;
-                canvas1.height = camera1.videoHeight;
-                canvas1.getContext('2d').drawImage(camera1, 0, 0);
-
-                snapshot1.src = canvas1.toDataURL('image/jpeg', 1.0);
-                camera1.style.display = 'none';
-                snapshot1.style.display = 'block';
-                captureButton1.classList.add('d-none');
-                retakeButton1.classList.remove('d-none');
-
-                checkEnableCompare();
-            });
-
-            retakeButton1.addEventListener('click', () => {
-                camera1.style.display = 'block';
-                snapshot1.style.display = 'none';
-                captureButton1.classList.remove('d-none');
-                retakeButton1.classList.add('d-none');
-                compareButton.disabled = true;
-            });
-
-            // Camera handlers for second image
             startButton2.addEventListener('click', async () => {
                 try {
                     if (stream2) {
                         stream2.getTracks().forEach(track => track.stop());
                     }
+                    // Use default camera settings
                     stream2 = await navigator.mediaDevices.getUserMedia({ video: true });
                     camera2.srcObject = stream2;
                     camera2.style.display = 'block';
@@ -448,26 +427,29 @@
                 }
             });
 
+            // Simplify capture handlers to default behavior
+            captureButton1.addEventListener('click', () => {
+                canvas1.width = camera1.videoWidth;
+                canvas1.height = camera1.videoHeight;
+                canvas1.getContext('2d').drawImage(camera1, 0, 0);
+                snapshot1.src = canvas1.toDataURL('image/jpeg');
+                camera1.style.display = 'none';
+                snapshot1.style.display = 'block';
+                captureButton1.classList.add('d-none');
+                retakeButton1.classList.remove('d-none');
+                checkEnableCompare();
+            });
+
             captureButton2.addEventListener('click', () => {
                 canvas2.width = camera2.videoWidth;
                 canvas2.height = camera2.videoHeight;
                 canvas2.getContext('2d').drawImage(camera2, 0, 0);
-
-                snapshot2.src = canvas2.toDataURL('image/jpeg', 1.0);
+                snapshot2.src = canvas2.toDataURL('image/jpeg');
                 camera2.style.display = 'none';
                 snapshot2.style.display = 'block';
                 captureButton2.classList.add('d-none');
                 retakeButton2.classList.remove('d-none');
-
                 checkEnableCompare();
-            });
-
-            retakeButton2.addEventListener('click', () => {
-                camera2.style.display = 'block';
-                snapshot2.style.display = 'none';
-                captureButton2.classList.remove('d-none');
-                retakeButton2.classList.add('d-none');
-                compareButton.disabled = true;
             });
 
             // Upload handlers
