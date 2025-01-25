@@ -1,7 +1,7 @@
 <?php
 class Database {
     private $host = 'localhost';
-    private $dbname = 'final';
+    private $dbname = 'final';  // Changed from 'quiz_db' to 'final'
     private $username = 'root';
     private $password = '';
     private $conn;
