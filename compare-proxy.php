@@ -16,10 +16,21 @@ try {
         throw new Exception('User not logged in');
     }
 
-    // Define upload directory with full path
-    $upload_dir = dirname(__FILE__) . '/uploads';
+    // Define upload directory with proper permissions
+    $upload_dir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'uploads';
+    
+    // Check and create directory with proper permissions
     if (!file_exists($upload_dir)) {
-        mkdir($upload_dir, 0777, true);
+        if (!@mkdir($upload_dir, 0755, true)) {
+            error_log("Failed to create directory: " . error_get_last()['message']);
+            throw new Exception('Failed to create upload directory');
+        }
+    }
+
+    // Verify directory is writable
+    if (!is_writable($upload_dir)) {
+        error_log("Directory not writable: " . $upload_dir);
+        throw new Exception('Upload directory is not writable');
     }
 
     function processImage($base64_string, $upload_dir) {
@@ -27,6 +38,7 @@ try {
             throw new Exception('Empty image data');
         }
 
+        // Clean base64 string
         if (strpos($base64_string, ',') !== false) {
             list(, $base64_string) = explode(',', $base64_string);
         }
@@ -36,8 +48,12 @@ try {
             throw new Exception('Invalid base64 image data');
         }
         
-        $filename = $upload_dir . '/img_' . uniqid() . '.jpg';
+        $filename = $upload_dir . DIRECTORY_SEPARATOR . 'img_' . uniqid() . '.jpg';
+        
+        // Attempt to save file with error logging
         if (file_put_contents($filename, $image_data) === false) {
+            error_log("Failed to write file: " . $filename);
+            error_log("Error: " . error_get_last()['message']);
             throw new Exception('Failed to save image file');
         }
         
