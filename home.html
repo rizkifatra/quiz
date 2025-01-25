@@ -118,6 +118,52 @@
                 padding: 5rem 0 8rem;
             }
         }
+
+        .gradient-text {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .navbar-brand i {
+            font-size: 1.25rem;
+            transform: translateY(-1px);
+        }
+
+        .navbar-brand i.fa-microscope {
+            transform: rotate(-15deg);
+        }
+
+        .navbar-brand i.fa-camera {
+            transform: rotate(15deg);
+        }
+
+        .btn-gradient {
+            background: var(--primary-gradient);
+            border: none;
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            color: white;
+        }
+
+        .btn-gradient:active {
+            transform: translateY(0);
+        }
+
+        .btn-gradient i {
+            transition: transform 0.3s ease;
+        }
+
+        .btn-gradient:hover i {
+            transform: scale(1.1);
+        }
     </style>
 </head>
 
@@ -126,7 +172,9 @@
     <nav class="navbar navbar-expand-lg navbar-light fixed-top">
         <div class="container">
             <a class="navbar-brand fw-bold" href="#">
-                <i class="fas fa-wand-magic-sparkles me-2 text-primary"></i>TextVision
+                <i class="fas fa-microscope me-2 text-primary"></i>
+                <i class="fas fa-camera me-2 text-info"></i>
+                <span class="gradient-text">Rizki Fatra 290911</span>
             </a>
         </div>
     </nav>
@@ -249,7 +297,7 @@
                     <button class="btn btn-primary btn-lg" id="compareImagesBtn" disabled>
                         <i class="fas fa-sync-alt me-2"></i>Compare Images
                     </button>
-                    <button class="btn btn-info ms-2" id="viewResultsBtn">
+                    <button class="btn btn-gradient btn-lg ms-2" id="viewResultsBtn">
                         <i class="fas fa-chart-line me-2"></i>View Results
                     </button>
                     <div id="imageComparisonResult" class="mt-3"></div>
